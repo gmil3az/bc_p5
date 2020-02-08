@@ -9,24 +9,37 @@ import "./Oraclize.sol";
 contract Ownable {
     //  TODO's
     //  1) create a private '_owner' variable of type address with a public getter function
+  address private _owner;
+
+  function owner() public view returns(address){
+    return _owner;
+  }
+  
     //  2) create an internal constructor that sets the _owner var to the creater of the contract 
     //  3) create an 'onlyOwner' modifier that throws if called by any account other than the owner.
     //  4) fill out the transferOwnership function
     //  5) create an event that emits anytime ownerShip is transfered (including in the constructor)
 
-    function transferOwnership(address newOwner) public onlyOwner {
-        // TODO add functionality to transfer control of the contract to a newOwner.
-        // make sure the new owner is a real address
+  modifier onlyOwner() {
+    require(msg.sender == _owner, 'only owner can perform this operation');
+    _;
+  }
 
-    }
+  function transferOwnership(address newOwner) public onlyOwner {
+    // TODO add functionality to transfer control of the contract to a newOwner.
+    // make sure the new owner is a real address
+
+  }
 }
 
+contract Pausable {
 //  TODO's: Create a Pausable contract that inherits from the Ownable contract
 //  1) create a private '_paused' variable of type bool
 //  2) create a public setter using the inherited onlyOwner modifier 
 //  3) create an internal constructor that sets the _paused variable to false
 //  4) create 'whenNotPaused' & 'paused' modifier that throws in the appropriate situation
 //  5) create a Paused & Unpaused event that emits the address that triggered the event
+}
 
 contract ERC165 {
     bytes4 private constant _INTERFACE_ID_ERC165 = 0x01ffc9a7;
@@ -418,28 +431,29 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
     // TODO: Create private vars for token _name, _symbol, and _baseTokenURI (string)
 
     // TODO: create private mapping of tokenId's to token uri's called '_tokenURIs'
+  mapping(uint256 => string) private _tokenURIs;
 
-    bytes4 private constant _INTERFACE_ID_ERC721_METADATA = 0x5b5e139f;
-    /*
-     * 0x5b5e139f ===
-     *     bytes4(keccak256('name()')) ^
-     *     bytes4(keccak256('symbol()')) ^
-     *     bytes4(keccak256('tokenURI(uint256)'))
-     */
+  bytes4 private constant _INTERFACE_ID_ERC721_METADATA = 0x5b5e139f;
+  /*
+   * 0x5b5e139f ===
+   *     bytes4(keccak256('name()')) ^
+   *     bytes4(keccak256('symbol()')) ^
+   *     bytes4(keccak256('tokenURI(uint256)'))
+   */
 
 
-    constructor (string memory name, string memory symbol, string memory baseTokenURI) public {
-        // TODO: set instance var values
+  constructor (string memory name, string memory symbol, string memory baseTokenURI) public {
+    // TODO: set instance var values
 
-        _registerInterface(_INTERFACE_ID_ERC721_METADATA);
-    }
+    _registerInterface(_INTERFACE_ID_ERC721_METADATA);
+  }
 
-    // TODO: create external getter functions for name, symbol, and baseTokenURI
+  // TODO: create external getter functions for name, symbol, and baseTokenURI
 
-    function tokenURI(uint256 tokenId) external view returns (string memory) {
-        require(_exists(tokenId));
-        return _tokenURIs[tokenId];
-    }
+  function tokenURI(uint256 tokenId) external view returns (string memory) {
+    require(_exists(tokenId));
+    return _tokenURIs[tokenId];
+  }
 
 
     // TODO: Create an internal function to set the tokenURI of a specified tokenId
@@ -451,6 +465,7 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 
 }
 
+contract RealEstateERC721Token {
 //  TODO's: Create CustomERC721Token contract that inherits from the ERC721Metadata contract. You can name this contract as you please
 //  1) Pass in appropriate values for the inherited ERC721Metadata contract
 //      - make the base token uri: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/
@@ -459,6 +474,8 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 //      -takes in a 'to' address, tokenId, and tokenURI as parameters
 //      -returns a true boolean upon completion of the function
 //      -calls the superclass mint and setTokenURI functions
+}
+
 
 
 
