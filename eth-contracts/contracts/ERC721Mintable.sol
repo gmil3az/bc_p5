@@ -7,28 +7,33 @@ import 'openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol';
 import "./Oraclize.sol";
 
 contract Ownable {
-    //  TODO's
-    //  1) create a private '_owner' variable of type address with a public getter function
+  //  TODO's
+  //  1) create a private '_owner' variable of type address with a public getter function
   address private _owner;
 
   function owner() public view returns(address){
     return _owner;
   }
   
-    //  2) create an internal constructor that sets the _owner var to the creater of the contract 
-    //  3) create an 'onlyOwner' modifier that throws if called by any account other than the owner.
-    //  4) fill out the transferOwnership function
-    //  5) create an event that emits anytime ownerShip is transfered (including in the constructor)
-
+  //  2) create an internal constructor that sets the _owner var to the creater of the contract
+  constructor(address owner) internal {
+    _owner = owner;
+  }
+  //  3) create an 'onlyOwner' modifier that throws if called by any account other than the owner.
   modifier onlyOwner() {
     require(msg.sender == _owner, 'only owner can perform this operation');
     _;
   }
-
+  //  4) fill out the transferOwnership function
+  //  5) create an event that emits anytime ownerShip is transfered (including in the constructor)
+  event OwnershipTransfered(address indexed from, address indexed to);
   function transferOwnership(address newOwner) public onlyOwner {
     // TODO add functionality to transfer control of the contract to a newOwner.
+    require(newOwner != address(0), 'address cannot be empty');
+    address previousOwner = _owner;
+    _owner = newOwner;
     // make sure the new owner is a real address
-
+    emit OwnershipTransfered(previousOwner, _owner);
   }
 }
 
