@@ -36,10 +36,13 @@ contract('TestERC721Mintable', accounts => {
 
 	    assert.web3Event(result, {
 		event: 'OwnershipTransfered',
-		// args: {
-		//     from: account_one,
-		//     to: account_two
-		// }
+		args: {
+		    "0": account_one,
+		    "1": account_two,
+		    "__length__": 2,
+		    from: account_one,
+		    to: account_two
+		}
 	    }, 'No OwnershipTransfered event emitted');
         })
 	
