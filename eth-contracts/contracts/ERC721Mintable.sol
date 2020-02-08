@@ -41,13 +41,36 @@ contract Pausable is Ownable {
 //  TODO's: Create a Pausable contract that inherits from the Ownable contract
 //  1) create a private '_paused' variable of type bool
   bool private _paused;
-//  2) create a public setter using the inherited onlyOwner modifier 
+//  2) create a public setter using the inherited onlyOwner modifier
+  function pause(bool paused) public onlyOwner {
+    _paused = paused;
+    if(paused){
+      emit Paused(msg.sender);
+    }else{
+      emit Unpaused(msg.sender);
+    }
+  }
+
+  function getPaused() public view returns(bool){
+    return _paused;
+  }
 //  3) create an internal constructor that sets the _paused variable to false
   constructor () internal Ownable(msg.sender) {
     _paused = false;
   }
 //  4) create 'whenNotPaused' & 'paused' modifier that throws in the appropriate situation
+  modifier whenNotPaused(){
+    require(_paused == false, 'The contract has been paused');
+    _;
+  }
+
+  modifier paused(){
+    require(_paused == true, 'The contract has unpaused');
+    _;
+  }
 //  5) create a Paused & Unpaused event that emits the address that triggered the event
+  event Paused(address indexed actor);
+  event Unpaused(address indexed actor);
 }
 
 contract ERC165 {
