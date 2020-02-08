@@ -59,18 +59,34 @@ contract('TestERC721Mintable', accounts => {
         })
 
 	it('should be able to pause the contract', async function () {
-	    await this.contract.pause(true, {from: account_one});
+	    let result = await this.contract.pause(true, {from: account_one});
             let paused = await this.contract.getPaused.call();
 	    assert.equal(paused, true, "paused must be set to true by account one");
+	    assert.web3Event(result, {
+		event: 'Paused',
+		args: {
+		    "0": account_one,
+		    "__length__": 1,
+		    actor: account_one
+		}
+	    }, 'No Paused event emitted');
         })
 
 	it('should not be able to pause the contract if not the owner', async function () {
-	    await this.contract.pause(false, {from: account_one});
+	    let beforeResult = await this.contract.pause(false, {from: account_one});
             let beforePaused = await this.contract.getPaused.call();
 	    assert.equal(beforePaused, false, "paused must be set to false by account one");
-
+	    assert.web3Event(beforeResult, {
+		event: 'Unpaused',
+		args: {
+		    "0": account_one,
+		    "__length__": 1,
+		    actor: account_one
+		}
+	    }, 'No Unpaused event emitted');
+	    
 	    try{
-		await this.contract.pause(false, {from: account_two});
+		afterResult = await this.contract.pause(true, {from: account_two});
 		assert.fail("pause setter should fail with the reason 'only owner can perform this operation'");
 	    }catch(err){
 	    }	    
