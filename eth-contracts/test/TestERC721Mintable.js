@@ -102,6 +102,11 @@ contract('TestERC721Mintable', accounts => {
             // TODO: mint multiple tokens
         })
 
+	it('should get initial balance of any address as zero', async function () { 
+            let result = await this.contract.balanceOf(account_one);
+	    assert.equal(result, 0 , "initial balance of the owner account should be zero");
+        })
+
         it('should return total supply', async function () { 
             
         })
