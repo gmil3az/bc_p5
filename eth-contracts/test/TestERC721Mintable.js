@@ -48,6 +48,37 @@ contract('TestERC721Mintable', accounts => {
 	
     });
 
+    describe('Pausable', function() {
+	beforeEach(async function () { 
+            this.contract = await RealEstateERC721Token.new({from: account_one});
+        })
+
+        it('should not be paused after deployment', async function () { 
+            let paused = await this.contract.getPaused.call();
+	    assert.equal(paused, false, "paused must be set to false after deployment");
+        })
+
+	it('should be able to pause the contract', async function () {
+	    await this.contract.pause(true, {from: account_one});
+            let paused = await this.contract.getPaused.call();
+	    assert.equal(paused, true, "paused must be set to true by account one");
+        })
+
+	it('should not be able to pause the contract if not the owner', async function () {
+	    await this.contract.pause(false, {from: account_one});
+            let beforePaused = await this.contract.getPaused.call();
+	    assert.equal(beforePaused, false, "paused must be set to false by account one");
+
+	    try{
+		await this.contract.pause(false, {from: account_two});
+		assert.fail("pause setter should fail with the reason 'only owner can perform this operation'");
+	    }catch(err){
+	    }	    
+            let afterPaused = await this.contract.getPaused.call();
+	    assert.equal(afterPaused, false, "paused must still be set to false, becuase account two is not the owner");
+        })
+    });
+
     describe('match erc721 spec', function () {
         beforeEach(async function () { 
             this.contract = await RealEstateERC721Token.new({from: account_one});
