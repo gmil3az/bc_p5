@@ -37,11 +37,15 @@ contract Ownable {
   }
 }
 
-contract Pausable {
+contract Pausable is Ownable {
 //  TODO's: Create a Pausable contract that inherits from the Ownable contract
 //  1) create a private '_paused' variable of type bool
+  bool private _paused;
 //  2) create a public setter using the inherited onlyOwner modifier 
 //  3) create an internal constructor that sets the _paused variable to false
+  constructor () internal Ownable(msg.sender) {
+    _paused = false;
+  }
 //  4) create 'whenNotPaused' & 'paused' modifier that throws in the appropriate situation
 //  5) create a Paused & Unpaused event that emits the address that triggered the event
 }
@@ -470,7 +474,7 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 
 }
 
-contract RealEstateERC721Token {
+contract RealEstateERC721Token is ERC721Metadata('RealEstate', '$RealEstate$', 'https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/') {
 //  TODO's: Create CustomERC721Token contract that inherits from the ERC721Metadata contract. You can name this contract as you please
 //  1) Pass in appropriate values for the inherited ERC721Metadata contract
 //      - make the base token uri: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/
