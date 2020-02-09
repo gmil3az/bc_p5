@@ -18,7 +18,7 @@ contract('SquareVerifier', accounts => {
 
     // Test verification with correct proof
     // - use the contents from proof.json generated from zokrates steps
-    it('Test verification with correct proof', async function () {
+    it('Test verification with correct proof (3*3=9)', async function () {
 	let args = {
             proof: {
 		a: ["0x21bd5a850ba1a1efeb611edc091303b79987c6a2e57532b40a6288d1d43a74c4", "0x0fe9b005b1af14d83ae2a77510a1dfa43641d4d92e9f82b050165e9b52e76ae7"],
@@ -33,7 +33,7 @@ contract('SquareVerifier', accounts => {
 	assert.equal(isValid, true, "Valid solution is not valid");
     })
 
-    it('Test verification with another correct proof', async function () {
+    it('Test verification with second correct proof (5*5=25)', async function () {
 	let args =     {
             proof: {
 		a: ["0x2e83189d3c989d521bd3915be3d5d91f518c5895658af6af995f664b00c8ba78", "0x14e217e9cd2ebd535fe93b5fd91bd7d800a38f8155f83f86e2d4024f9018049f"],
@@ -41,6 +41,21 @@ contract('SquareVerifier', accounts => {
 		c: ["0x120ba8717d7ca9bfede379f72ae972b159d8751ab0fac42dffcf38d022039080", "0x2b97096571374f38219647333911730d9b51ba62b2bbe67f287ddcadd531e8da"]
             },
             inputs: ["0x0000000000000000000000000000000000000000000000000000000000000019", "0x0000000000000000000000000000000000000000000000000000000000000001"]
+	};
+	
+        let isValid = await this.contract.verifySoln.call(args.proof.a, args.proof.b, args.proof.c, args.inputs);
+	console.log(util.inspect(isValid));
+	assert.equal(isValid, true, "Valid solution is not valid");
+    })
+
+    it('Test verification with third correct proof (4*4=16)', async function () {
+	let args =     {
+            proof: {
+		a: ["0x20d0a45d2747056c5cf98342adf05a0d816c1f444e7fa138dced95c6f6701209", "0x03c45a8120b49ed94cf22741a7147dde432f09145caf3cdfe809e20de62b82ab"],
+		b: [["0x04d0512619cd231793d9396d8b11df369424deb9b0c802a5f9f50520d5d2dc87", "0x2bf9f12a40b5d87d94240e3819af1928d2829f6425231b99adeba44b3127f994"], ["0x2d265364987a715328d5b5897fad83f9e45b2536fc047360041dba6cc6af52da", "0x2c20543e479c335733d301b57ec57346961a12e5766f472e2ac511a514344a0d"]],
+		c: ["0x0e957a1630bbd2d4427c3e352e4bfd551df42b874f72f7317535965006a676e3", "0x23ab2e11b235503abecfc282aaab877f711efee9a1aab977597495e7f031c53b"]
+            },
+            inputs: ["0x0000000000000000000000000000000000000000000000000000000000000010", "0x0000000000000000000000000000000000000000000000000000000000000001"]
 	};
 	
         let isValid = await this.contract.verifySoln.call(args.proof.a, args.proof.b, args.proof.c, args.inputs);
