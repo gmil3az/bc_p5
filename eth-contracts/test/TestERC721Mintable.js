@@ -105,7 +105,8 @@ contract('TestERC721Mintable', accounts => {
             // TODO: mint multiple tokens
 	    await this.contract.mint(account_four, 101);
 	    await this.contract.mint(account_four, 102);
-	    await this.contract.mint(account_four, 103); 
+	    await this.contract.mint(account_four, 103);
+	    await this.contract.mint(account_five, 105); 
         })
 
 	it('should get initial balance of any address as zero', async function () { 
@@ -136,7 +137,7 @@ contract('TestERC721Mintable', accounts => {
         })
 
 	it('should not be able to mint the existing token id', async function () {
-	    let beforeFourBalance = await this.contract.balanceOf(account_four);
+	    let fourBalanceBefore = await this.contract.balanceOf(account_four);
 	    try{
 		await this.contract.mint(account_three, 103);
 		assert.fail('it should not be able to mint the existing token id 103');
@@ -145,16 +146,18 @@ contract('TestERC721Mintable', accounts => {
 	    
 	    let threeBalance = await this.contract.balanceOf(account_three);
 	    assert.equal(threeBalance, 0 , "balance of the account three should be 0");
-	    let afterfourBalance = await this.contract.balanceOf(account_four);
-	    assert.equal(afterfourBalance.toNumber(), beforeFourBalance.toNumber() , "balance of the account four should still be the same");
+	    let fourBalanceAfter = await this.contract.balanceOf(account_four);
+	    assert.equal(fourBalanceAfter.toNumber(), fourBalanceBefore.toNumber() , "balance of the account four should still be the same");
         })
 
 	it('should get token balance', async function () { 
-            
+            let tokenBalance = await this.contract.balanceOf(account_five);
+	    assert.equal(tokenBalance.toNumber(), 1, "balance of the account five should be 1");
         })
 
         it('should return total supply', async function () { 
-            
+            let tokenBalance = await this.contract.balanceOf(account_five);
+	    assert.equal(tokenBalance.toNumber(), 1, "balance of the account five should be 1");
         })
 
         it('should transfer token from one owner to another', async function () { 
