@@ -33,9 +33,24 @@ contract('SquareVerifier', accounts => {
 	assert.equal(isValid, true, "Valid solution is not valid");
     })
 
+    it('Test verification with another correct proof', async function () {
+	let args =     {
+            proof: {
+		a: ["0x2e83189d3c989d521bd3915be3d5d91f518c5895658af6af995f664b00c8ba78", "0x14e217e9cd2ebd535fe93b5fd91bd7d800a38f8155f83f86e2d4024f9018049f"],
+		b: [["0x10e2592dd3acbf65882effaec7174e9d09e5aa56bf4935561d8847eed2000c22", "0x2369ea3ea02d3cd285c2b3adeee3d8338d42e89173a67dfaea8e12638618096e"], ["0x293750c361d7f42bda94ddfc6446a665f7ed1a83f7e63cb2471f5d67262527ef", "0x28aa6dffe64755f191e21a7976dad364c4848cc86c9b029c4430ddcb096df815"]],
+		c: ["0x120ba8717d7ca9bfede379f72ae972b159d8751ab0fac42dffcf38d022039080", "0x2b97096571374f38219647333911730d9b51ba62b2bbe67f287ddcadd531e8da"]
+            },
+            inputs: ["0x0000000000000000000000000000000000000000000000000000000000000019", "0x0000000000000000000000000000000000000000000000000000000000000001"]
+	};
+	
+        let isValid = await this.contract.verifySoln.call(args.proof.a, args.proof.b, args.proof.c, args.inputs);
+	console.log(util.inspect(isValid));
+	assert.equal(isValid, true, "Valid solution is not valid");
+    })
+
     // Test verification with incorrect proof
     it('Test verification with incorrect proof', async function () {
-		let args = {
+	let args = {
             proof: {
 		a: ["0x21bd5a850ba1a1efeb611edc091303b79987c6a2e57532b40a6288d1d43a74c4", "0x0fe9b005b1af14d83ae2a77510a1dfa43641d4d92e9f82b050165e9b52e76ae7"],
 		b: [["0x139b032966799a55f12585b285e4af973a6f78263f8eb9c401c101a86edf3489", "0x13137b949100a59a4be3837b6b6c015afa81b233a1f44727a542cbb5b824fc55"], ["0x03a7e90ebbe9e7fb79f6903ab09ff46be491876678d3f880f6794b1d3da01131", "0x0e3443f19f1a5fbf767aa8e67fc29c4fe4f32ac4c7c9e099261d7a87873362fc"]],
