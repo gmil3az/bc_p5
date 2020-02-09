@@ -10,6 +10,7 @@ contract('TestERC721Mintable', accounts => {
     const account_three = accounts[2];
     const account_four = accounts[3];
     const account_five = accounts[4];
+    const account_six = accounts[5];
     accounts.forEach((account, index) => console.log(`${index + 1}.) account[${index}] = ${account}`));
 
     describe('Ownable', function() {
@@ -217,8 +218,96 @@ contract('TestERC721Mintable', accounts => {
 	    assert.equal(fiveBalanceAfter.toNumber(), fiveBalanceBefore.toNumber() + 1, "token balance of account five should be increased by one");
         })
 
-	it('should be able to approve another address to transfer the given token id', async function () { 
-            // use getApproved
+	it('should be able to approve another address to transfer the given token id', async function () {
+	    // owner is account five
+	    let owner = await this.contract.ownerOf(105);
+	    assert.equal(owner, account_five);
+	    // there is no approved account for this token id 105
+	    let approvedAddr = await this.contract.getApproved(105);
+	    assert.equal(approvedAddr, empty_address);
+	    try{
+		// it should fail because it's not the owner of the token 105 and having no approval
+		await this.contract.transferFrom(account_five, account_six, 105, {from: account_four});
+		assert.fail("transferFrom should not allow unauthorized account to transfer the token");
+	    }catch(err){
+	    }
+
+	    // owner is still account five
+	    owner = await this.contract.ownerOf(105);
+	    assert.equal(owner, account_five);
+
+	    // set account four as the approved account for token id 105
+	    let approvalResult = await this.contract.approve(account_four, 105, {from: account_five});
+	    assert.web3Event(approvalResult, {
+		event: 'Approval',
+		args: {
+		    "0": account_five,
+		    "1": account_four,
+		    "2": 105,
+		    "__length__": 3,
+		    "owner": account_five,
+		    "approved": account_four,
+		    "tokenId": 105
+		}
+	    }, 'No Approval event emitted');
+	    approvedAddr = await this.contract.getApproved(105);
+	    assert.equal(approvedAddr, account_four);
+	    
+
+	    // account four can transfer the token 105 on behalf of the account five
+	    await this.contract.transferFrom(account_five, account_six, 105, {from: account_four}); 
+	    owner = await this.contract.ownerOf(105);
+	    assert.equal(owner, account_six);
+
+	    // approved account should be cleared
+	    approvedAddr = await this.contract.getApproved(105);
+	    assert.equal(approvedAddr, empty_address);
+        })
+
+	it('should be able to set another address as operator to transfer the given token id (ApprovalForAll)', async function () {
+	    // owner is account five
+	    let owner = await this.contract.ownerOf(105);
+	    assert.equal(owner, account_five);
+	    // there is no approved account for this token id 105
+	    let approvedAddr = await this.contract.isApprovedForAll(account_five, account_four);
+	    assert.equal(approvedAddr, false);
+	    try{
+		// it should fail because it's not the owner of the token 105 and having no approval
+		await this.contract.transferFrom(account_five, account_six, 105, {from: account_four});
+		assert.fail("transferFrom should not allow unauthorized account to transfer the token");
+	    }catch(err){
+	    }
+
+	    // owner is still account five
+	    owner = await this.contract.ownerOf(105);
+	    assert.equal(owner, account_five);
+
+	    // set account four as the approved operator for account five
+	    let approvalResult = await this.contract.setApprovalForAll(account_four, true, {from: account_five});
+	    assert.web3Event(approvalResult, {
+		event: 'ApprovalForAll',
+		args: {
+		    "0": account_five,
+		    "1": account_four,
+		    "2": true,
+		    "__length__": 3,
+		    "owner": account_five,
+		    "operator": account_four,
+		    "approved": true
+		}
+	    }, 'No ApprovalForAll event emitted');
+	    approvedAddr = await this.contract.isApprovedForAll(account_five, account_four);
+	    assert.equal(approvedAddr, true);
+	    
+
+	    // account four can transfer the token 105 on behalf of the account five
+	    await this.contract.transferFrom(account_five, account_six, 105, {from: account_four}); 
+	    owner = await this.contract.ownerOf(105);
+	    assert.equal(owner, account_six);
+
+	    // approved account should not be cleared, since it's tied to the account itself not the token
+	    approvedAddr = await this.contract.isApprovedForAll(account_five, account_four);
+	    assert.equal(approvedAddr, true);
         })
     });
 
