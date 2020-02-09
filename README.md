@@ -17,9 +17,15 @@ Run ganache cli:
 
 Compile and deploy contracts on the local environment:
 
+`cd eth-contracts`
+
+`touch .secret`
+
 `truffle test`
 
 ## Where is my deployed contract on Rinkeby?
+
+How did I deploy it to Rinkeby?
 
 `truffle compile`
 
@@ -853,14 +859,14 @@ For the ABI of the SolnSquareVerifier contract:
 
 To find my minted tokens on Rinkeby, please follow the link here:
 
-`https://rinkeby.etherscan.io/token/0x784dd48b9c22de4f75cffa733dc85f3e15fd6389`
+[https://rinkeby.etherscan.io/token/0x784dd48b9c22de4f75cffa733dc85f3e15fd6389](https://rinkeby.etherscan.io/token/0x784dd48b9c22de4f75cffa733dc85f3e15fd6389)
 
 
 ## Where to see my OpenSea listing?
 
-`https://rinkeby.opensea.io/assets/realestate-v2`
+[https://rinkeby.opensea.io/assets/realestate-v2](https://rinkeby.opensea.io/assets/realestate-v2)
 
-`https://rinkeby.opensea.io/activity/realestate-v2`
+[https://rinkeby.opensea.io/activity/realestate-v2](https://rinkeby.opensea.io/activity/realestate-v2)
 
 ## How to install Zokrates
 
