@@ -314,6 +314,7 @@ contract('TestERC721Mintable', accounts => {
     describe('match erc721 metadata spec', function () {
         beforeEach(async function () { 
             this.contract = await RealEstateERC721Token.new({from: account_one});
+	    await this.contract.mint(account_five, 105); 
         })
 	
 	it('should return proper name, symbol, baseTokenURI', async function () { 
@@ -329,7 +330,8 @@ contract('TestERC721Mintable', accounts => {
 
 	// token uri should be complete i.e: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/1
         it('should return token uri', async function () { 
-            
+            let tokenURI = await this.contract.tokenURI(105);
+	    assert.equal(tokenURI, 'https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/105', 'token uri does not match the given sample');
         })
     });
 
