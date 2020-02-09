@@ -340,12 +340,17 @@ contract('TestERC721Mintable', accounts => {
             this.contract = await RealEstateERC721Token.new({from: account_one});
         })
 
-        it('should fail when minting when address is not contract owner', async function () { 
-            
-        })
-
         it('should return contract owner', async function () { 
-            
+            let owner = await this.contract.owner();
+	    assert.equal(owner, account_one, "owner should be account one");
+        })
+	
+        it('should fail when minting when address is not contract owner', async function () {
+	    try{
+		await this.contract.mint(account_four, 101, {from: account_two});
+		assert.fail('should fail when minting when address is not contract owner');
+	    }catch(err){
+	    }
         })
 
     });
