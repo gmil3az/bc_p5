@@ -30,7 +30,7 @@ contract('SolnSquareVerifier', accounts => {
 	let args = sol339;
 	let tokenId = 201;
         let result = await this.contract.mint(account_two, tokenId, args.proof.a, args.proof.b, args.proof.c, args.inputs);
-	// let tokenId = await this.contract.tokenId.call(args.proof.a, args.proof.b, args.proof.c, args.inputs);
+	let solnId = await this.contract.solnId.call(args.proof.a, args.proof.b, args.proof.c, args.inputs);
 
 	let owner = await this.contract.ownerOf(tokenId);
 	assert.equal(owner, account_two);
@@ -47,6 +47,18 @@ contract('SolnSquareVerifier', accounts => {
 		"tokenId": tokenId
 	    }
 	}, 'No Transfer event emitted');
+		assert.web3Event(result, {
+	    event: 'SolnAdded',
+	    args: {
+		"0": solnId,
+		"1": 1,
+		"2": account_one,
+		"__length__": 3,
+		"solnId": solnId,
+		"index": 1,
+		"author": account_one
+	    }
+	}, 'No SolnAdded event emitted');
     })
 
 })
