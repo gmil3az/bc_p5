@@ -27,6 +27,21 @@ Compile and deploy contracts on the local environment:
 
 
 
+## How to install Zokrates
+
+for Linux, MacOS and FreeBSD:
+
+`curl -LSfs get.zokrat.es | sh`
+
+I've committed my Zokrates resources to this Git repo, please go to `./zokrates/code/square/*`. If you want to generate a new proof, you can run the following commands:
+
+`./zokrates compute-witness -a 10 100`
+
+`./zokrates generate-proof`
+
+It will generate a new proof.json which can be used in `./eth-contracts/test/TestSquareVerifier.js` or `./eth-contracts/test/TestSolnSquareVerifier.js`
+
+
 # Udacity Blockchain Capstone
 
 The capstone will build upon the knowledge you have gained in the course in order to build a decentralized housing product. 
