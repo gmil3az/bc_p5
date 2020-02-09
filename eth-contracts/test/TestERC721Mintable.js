@@ -102,25 +102,39 @@ contract('TestERC721Mintable', accounts => {
             // TODO: mint multiple tokens
         })
 
+	it('should be able to mint new token', async function () { 
+
+        })
+
 	it('should get initial balance of any address as zero', async function () { 
             let result = await this.contract.balanceOf(account_one);
 	    assert.equal(result, 0 , "initial balance of the owner account should be zero");
+        })
+
+	it('should get token balance', async function () { 
+            
         })
 
         it('should return total supply', async function () { 
             
         })
 
-        it('should get token balance', async function () { 
-            
-        })
-
-        // token uri should be complete i.e: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/1
-        it('should return token uri', async function () { 
-            
-        })
-
         it('should transfer token from one owner to another', async function () { 
+            // use ownerOf
+        })
+
+	it('should be able to approve another address to transfer the given token id', async function () { 
+            // use getApproved
+        })
+    });
+
+    describe('match erc721 metadata spec', function () {
+	it('should return proper name, symbol, baseTokenURI', async function () { 
+
+        })
+
+	// token uri should be complete i.e: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/1
+        it('should return token uri', async function () { 
             
         })
     });
