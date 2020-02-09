@@ -15,7 +15,7 @@ Run ganache cli:
 
 `ganache-cli -a 30 -l 8000000`
 
-Compile and deploy contracts on the local environment:
+Run truffle test:
 
 `cd eth-contracts`
 
