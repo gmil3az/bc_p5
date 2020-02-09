@@ -143,9 +143,21 @@ contract('TestERC721Mintable', accounts => {
 		assert.fail('it should not be able to mint the existing token id 103');
 	    }catch(err){
 	    }
-	    
 	    let threeBalance = await this.contract.balanceOf(account_three);
 	    assert.equal(threeBalance, 0 , "balance of the account three should be 0");
+	    let fourBalanceAfter = await this.contract.balanceOf(account_four);
+	    assert.equal(fourBalanceAfter.toNumber(), fourBalanceBefore.toNumber() , "balance of the account four should still be the same");
+        })
+
+	it('should not be able to mint any token if not the owner', async function () {
+	    let fourBalanceBefore = await this.contract.balanceOf(account_four);
+	    try{
+		await this.contract.mint(account_four, 106, {from: account_four});
+		assert.fail('it should not be able to mint any token if not the owner');
+	    }catch(err){
+	    }
+	    let owner = await this.contract.ownerOf(106);
+	    assert.equal(owner, empty_address);
 	    let fourBalanceAfter = await this.contract.balanceOf(account_four);
 	    assert.equal(fourBalanceAfter.toNumber(), fourBalanceBefore.toNumber() , "balance of the account four should still be the same");
         })
@@ -156,12 +168,13 @@ contract('TestERC721Mintable', accounts => {
         })
 
         it('should return total supply', async function () { 
-            let tokenBalance = await this.contract.balanceOf(account_five);
-	    assert.equal(tokenBalance.toNumber(), 1, "balance of the account five should be 1");
+            let totalSupply = await this.contract.totalSupply();
+	    assert.equal(totalSupply.toNumber(), 4, "total supply should be 4");
         })
 
         it('should transfer token from one owner to another', async function () { 
             // use ownerOf
+	    // await this.contract.transferFrom()
         })
 
 	it('should be able to approve another address to transfer the given token id', async function () { 
