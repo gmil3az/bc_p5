@@ -97,6 +97,21 @@ contract('TestERC721Mintable', accounts => {
             let afterPaused = await this.contract.getPaused.call();
 	    assert.equal(afterPaused, false, "paused must still be set to false, becuase account two is not the owner");
         })
+
+	it('should not be able to mint if the contract has been paused', async function () {
+	    await this.contract.pause(true, {from: account_one});
+            let paused = await this.contract.getPaused.call();
+	    assert.equal(paused, true, "paused must be set to true by account one");
+	    try {
+		await this.contract.mint(account_one, 100);
+		assert.fail("it should not be able to mint if the contract has been paused");
+	    }catch(err){
+	    }
+	    await this.contract.pause(false, {from: account_one});
+            paused = await this.contract.getPaused.call();
+	    assert.equal(paused, false, "paused must be set to false by account one");
+	    await this.contract.mint(account_one, 100);
+        })
     });
 
     describe('match erc721 spec', function () {

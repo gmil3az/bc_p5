@@ -76,7 +76,7 @@ contract SolnSquareVerifier is ERC721Mintable.RealEstateERC721Token, Zokrates.Sq
 		uint[2][2] memory b,
 		uint[2] memory c,
 		uint[2] memory input
-		) public onlyOwner {
+		) public onlyOwner whenNotPaused {
     require(to != address(0), "address cannot be empty");
     require(!_exists(tokenId), "token id already exist");
     require(super.verifySoln(a, b, c, input), "solution is not valid");
