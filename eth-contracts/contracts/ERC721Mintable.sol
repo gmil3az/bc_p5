@@ -199,7 +199,7 @@ contract ERC721 is Pausable, ERC165 {
     }
 
     function transferFrom(address from, address to, uint256 tokenId) public {
-        require(_isApprovedOrOwner(msg.sender, tokenId));
+      require(_isApprovedOrOwner(msg.sender, tokenId), "only owner can transfer the token");
 
         _transferFrom(from, to, tokenId);
     }

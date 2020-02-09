@@ -172,9 +172,49 @@ contract('TestERC721Mintable', accounts => {
 	    assert.equal(totalSupply.toNumber(), 4, "total supply should be 4");
         })
 
-        it('should transfer token from one owner to another', async function () { 
-            // use ownerOf
-	    // await this.contract.transferFrom()
+	it('should not be able to transfer token if not the owner', async function () {
+	    try{
+		await this.contract.transferFrom(account_four, account_five, 101, {from: account_five});
+		assert.fail('it should not be able to transfer token if not the owner');
+	    }catch(err){
+	    }
+	    let owner = await this.contract.ownerOf(101);
+	    assert.equal(owner, account_four);
+
+	    try{
+		// even the contract owner
+		await this.contract.transferFrom(account_four, account_five, 101, {from: await this.contract.owner()});
+		assert.fail('it should not be able to transfer token if not the owner');
+	    }catch(err){
+	    }
+	    owner = await this.contract.ownerOf(101);
+	    assert.equal(owner, account_four);
+        })
+
+        it('should transfer token from one owner to another', async function () {
+	    let owner = await this.contract.ownerOf(103);
+	    assert.equal(owner, account_four);
+	    let fourBalanceBefore = await this.contract.balanceOf(account_four);
+	    let fiveBalanceBefore = await this.contract.balanceOf(account_five);
+	    let result = await this.contract.transferFrom(account_four, account_five, 103, {from: account_four});
+	    owner = await this.contract.ownerOf(103);
+	    assert.equal(owner, account_five);
+	    assert.web3Event(result, {
+		event: 'Transfer',
+		args: {
+		    "0": account_four,
+		    "1": account_five,
+		    "2": 103,
+		    "__length__": 3,
+		    "from": account_four,
+		    "to": account_five,
+		    "tokenId": 103
+		}
+	    }, 'No Transfer event emitted');
+	    let fourBalanceAfter = await this.contract.balanceOf(account_four);
+	    let fiveBalanceAfter = await this.contract.balanceOf(account_five);
+	    assert.equal(fourBalanceAfter.toNumber(), fourBalanceBefore.toNumber() - 1, "token balance of account four should be decreased by one");
+	    assert.equal(fiveBalanceAfter.toNumber(), fiveBalanceBefore.toNumber() + 1, "token balance of account five should be increased by one");
         })
 
 	it('should be able to approve another address to transfer the given token id', async function () { 
