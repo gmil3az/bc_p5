@@ -34,19 +34,19 @@ How did I deploy it to Rinkeby?
 For the deployed contract address:
 
 `
-   Deploying 'SolnSquareVerifier'
-   ------------------------------
-   > transaction hash:    0xa623e97245a756e505a1718e92bc9a9a151c7e3a3686feed3c2242a388a465e3
-   > Blocks: 0            Seconds: 5
-   > contract address:    0x784dd48B9C22DE4f75cFFA733dC85f3E15fD6389
-   > block number:        5941262
-   > block timestamp:     1581259118
-   > account:             0x69Ad730DFBD419d4131C9dF0293fd38B27BebbEB
-   > balance:             9.451702070262412918
-   > gas used:            4626621
-   > gas price:           20 gwei
-   > value sent:          0 ETH
-   > total cost:          0.09253242 ETH
+Deploying 'SolnSquareVerifier'
+------------------------------
+> transaction hash:    0xa623e97245a756e505a1718e92bc9a9a151c7e3a3686feed3c2242a388a465e3
+> Blocks: 0            Seconds: 5
+> contract address:    0x784dd48B9C22DE4f75cFFA733dC85f3E15fD6389
+> block number:        5941262
+> block timestamp:     1581259118
+> account:             0x69Ad730DFBD419d4131C9dF0293fd38B27BebbEB
+> balance:             9.451702070262412918
+> gas used:            4626621
+> gas price:           20 gwei
+> value sent:          0 ETH
+> total cost:          0.09253242 ETH
 `
 
 For the ABI of the SolnSquareVerifier contract:
