@@ -57,18 +57,29 @@ contract SolnSquareVerifier is ERC721Mintable.RealEstateERC721Token, Zokrates.Sq
     return keccak256(abi.encodePacked(a, b ,c ,input));
   }
 
+  /* function tokenId( */
+  /* 		   uint[2] memory a, */
+  /* 		   uint[2][2] memory b, */
+  /* 		   uint[2] memory c, */
+  /* 		   uint[2] memory input */
+  /* 		   ) public pure returns(uint256) { */
+  /*   return uint256(solnId(a,b,c,input)); */
+  /* } */
+
   // TODO Create a function to mint new NFT only after the solution has been verified
   //  - make sure the solution is unique (has not been used before)
   //  - make sure you handle metadata as well as tokenSuplly
   function mint(
+		address to,
+		uint256 tokenId,
 		uint[2] memory a,
 		uint[2][2] memory b,
 		uint[2] memory c,
 		uint[2] memory input
 		) public onlyOwner {
     require(super.verifySoln(a, b, c, input), "solution is not valid");
-    bytes32 solutionId = _addSoln(a, b, c, input);
-    super.mint(msg.sender, uint256(solutionId));
+    _addSoln(a, b, c, input);
+    super.mint(to, tokenId);
   }
   
 }

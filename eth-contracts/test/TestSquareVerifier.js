@@ -29,7 +29,6 @@ contract('SquareVerifier', accounts => {
 	};
 	
         let isValid = await this.contract.verifySoln.call(args.proof.a, args.proof.b, args.proof.c, args.inputs);
-	console.log(util.inspect(isValid));
 	assert.equal(isValid, true, "Valid solution is not valid");
     })
 
@@ -44,7 +43,6 @@ contract('SquareVerifier', accounts => {
 	};
 	
         let isValid = await this.contract.verifySoln.call(args.proof.a, args.proof.b, args.proof.c, args.inputs);
-	console.log(util.inspect(isValid));
 	assert.equal(isValid, true, "Valid solution is not valid");
     })
 
@@ -59,7 +57,6 @@ contract('SquareVerifier', accounts => {
 	};
 	
         let isValid = await this.contract.verifySoln.call(args.proof.a, args.proof.b, args.proof.c, args.inputs);
-	console.log(util.inspect(isValid));
 	assert.equal(isValid, true, "Valid solution is not valid");
     })
 
@@ -79,6 +76,3 @@ contract('SquareVerifier', accounts => {
     })
 
 })
-
-
-
