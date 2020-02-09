@@ -4,10 +4,13 @@ require('truffle-test-utils').init();
 
 contract('TestERC721Mintable', accounts => {
 
+    const empty_address = "0x0000000000000000000000000000000000000000";
     const account_one = accounts[0];
     const account_two = accounts[1];
     const account_three = accounts[2];
-    accounts.forEach((account, index) => console.log(`account[${index}] = ${account}`));
+    const account_four = accounts[3];
+    const account_five = accounts[4];
+    accounts.forEach((account, index) => console.log(`${index + 1}.) account[${index}] = ${account}`));
 
     describe('Ownable', function() {
 	beforeEach(async function () { 
@@ -100,15 +103,50 @@ contract('TestERC721Mintable', accounts => {
             this.contract = await RealEstateERC721Token.new({from: account_one});
 
             // TODO: mint multiple tokens
-        })
-
-	it('should be able to mint new token', async function () { 
-
+	    await this.contract.mint(account_four, 101);
+	    await this.contract.mint(account_four, 102);
+	    await this.contract.mint(account_four, 103); 
         })
 
 	it('should get initial balance of any address as zero', async function () { 
-            let result = await this.contract.balanceOf(account_one);
-	    assert.equal(result, 0 , "initial balance of the owner account should be zero");
+            let result = await this.contract.balanceOf(account_three);
+	    assert.equal(result, 0 , "initial balance of any account should be zero");
+        })
+
+	it('should be able to mint new token', async function () { 
+	    let beforeResult = await this.contract.balanceOf(account_four);
+	    assert.equal(beforeResult, 3 , "balance of the account four should be 3");
+	    let result = await this.contract.mint(account_four, 104);
+	    let afterResult = await this.contract.balanceOf(account_four);
+	    let owner = await this.contract.ownerOf(104);
+	    assert.equal(owner, account_four);
+	    assert.equal(afterResult, 4 , "balance of the account four should be 4");
+	    assert.web3Event(result, {
+		event: 'Transfer',
+		args: {
+		    "0": empty_address,
+		    "1": account_four,
+		    "2": 104,
+		    "__length__": 3,
+		    "from": empty_address,
+		    "to": account_four,
+		    "tokenId": 104
+		}
+	    }, 'No Transfer event emitted');
+        })
+
+	it('should not be able to mint the existing token id', async function () {
+	    let beforeFourBalance = await this.contract.balanceOf(account_four);
+	    try{
+		await this.contract.mint(account_three, 103);
+		assert.fail('it should not be able to mint the existing token id 103');
+	    }catch(err){
+	    }
+	    
+	    let threeBalance = await this.contract.balanceOf(account_three);
+	    assert.equal(threeBalance, 0 , "balance of the account three should be 0");
+	    let afterfourBalance = await this.contract.balanceOf(account_four);
+	    assert.equal(afterfourBalance.toNumber(), beforeFourBalance.toNumber() , "balance of the account four should still be the same");
         })
 
 	it('should get token balance', async function () { 
@@ -129,8 +167,19 @@ contract('TestERC721Mintable', accounts => {
     });
 
     describe('match erc721 metadata spec', function () {
+        beforeEach(async function () { 
+            this.contract = await RealEstateERC721Token.new({from: account_one});
+        })
+	
 	it('should return proper name, symbol, baseTokenURI', async function () { 
+	    let name = await this.contract.name();
+	    assert.equal(name, "RealEstate");
 
+	    let symbol = await this.contract.symbol();
+	    assert.equal(symbol, "$RealEstate$");
+
+	    let baseTokenURI = await this.contract._getBaseTokenURI();
+	    assert.equal(baseTokenURI, 'https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/');
         })
 
 	// token uri should be complete i.e: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/1
